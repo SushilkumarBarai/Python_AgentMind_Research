@@ -1,0 +1,83 @@
+graph TD
+    Start([🚀 Start Application]) --> LoadEnv[⚙️ Load Environment Variables]
+    LoadEnv --> InitLLM[🤖 Initialize Claude LLM<br/>model: claude-3-5-sonnet]
+    InitLLM --> InitParser[📋 Initialize Pydantic Parser<br/>ResearchResponse Schema]
+    InitParser --> InitPrompt[💬 Create Chat Prompt Template<br/>System + Human + Scratchpad]
+    InitPrompt --> InitTools[🛠️ Initialize 8 Tools<br/>search, wiki, calculator, etc.]
+    
+    InitTools --> CreateAgent[🔧 Create Tool Calling Agent]
+    CreateAgent --> CreateExecutor[⚡ Create Agent Executor<br/>max_iterations: 10]
+    CreateExecutor --> DisplayMenu[📺 Display Welcome Menu<br/>Show Available Capabilities]
+    
+    DisplayMenu --> GetInput{📝 Get User Query}
+    GetInput -->|Empty Query| ErrorMsg[❌ Show Error:<br/>Invalid Query]
+    ErrorMsg --> End([🏁 End])
+    
+    GetInput -->|Valid Query| StartResearch[🔍 Start Research Process]
+    StartResearch --> InvokeAgent[⚡ Invoke Agent Executor]
+    
+    InvokeAgent --> AgentThinking{🧠 Agent Analyzes Query}
+    
+    AgentThinking --> SelectTool{🎯 Select Appropriate Tool}
+    
+    SelectTool -->|Numbers/Math| CalcTool[🧮 Calculator Tool<br/>Evaluate Expression]
+    SelectTool -->|Web Info| SearchTool[🔍 Search Tool<br/>DuckDuckGo Search]
+    SelectTool -->|Facts/History| WikiTool[📚 Wikipedia Tool<br/>Encyclopedia Lookup]
+    SelectTool -->|Specific URL| ScraperTool[🌐 Web Scraper<br/>Extract Content]
+    SelectTool -->|Data File| DataTool[📊 Data Analysis<br/>CSV/JSON Analysis]
+    SelectTool -->|Date/Time| DateTool[📅 DateTime Tool<br/>Current Time Info]
+    SelectTool -->|Read File| FileTool[📄 File Reader<br/>Read Local File]
+    SelectTool -->|Save Output| SaveTool[💾 Save Tool<br/>Write to File]
+    
+    CalcTool --> ToolResult[📤 Tool Returns Result]
+    SearchTool --> ToolResult
+    WikiTool --> ToolResult
+    ScraperTool --> ToolResult
+    DataTool --> ToolResult
+    DateTool --> ToolResult
+    FileTool --> ToolResult
+    SaveTool --> ToolResult
+    
+    ToolResult --> CheckIterations{🔄 Check Iterations}
+    CheckIterations -->|Need More Info| AgentThinking
+    CheckIterations -->|Max Iterations| ForceOutput[⚠️ Force Output]
+    CheckIterations -->|Complete| GenerateOutput[📝 Generate Structured Output]
+    
+    ForceOutput --> ParseResponse
+    GenerateOutput --> ParseResponse{🔍 Parse Response}
+    
+    ParseResponse -->|Success| DisplayResults[📊 Display Structured Results]
+    ParseResponse -->|Parsing Error| DisplayRaw[⚠️ Display Raw Response<br/>Show Error Message]
+    
+    DisplayResults --> ShowTopic[📌 Show Topic]
+    ShowTopic --> ShowSummary[📝 Show Summary]
+    ShowSummary --> ShowFindings[🔑 Show Key Findings]
+    ShowFindings --> ShowSources[🔗 Show Sources]
+    ShowSources --> ShowTools[🛠️ Show Tools Used]
+    
+    ShowTools --> AskSave{💾 Ask User to Save?}
+    DisplayRaw --> AskSaveFallback{💾 Ask User to Save?}
+    
+    AskSave -->|Yes| SaveResearch[💾 Save Research to File<br/>research_output.txt]
+    AskSave -->|No| SkipSave[⏭️ Skip Saving]
+    AskSaveFallback -->|Yes| SaveResearch
+    AskSaveFallback -->|No| SkipSave
+    
+    SaveResearch --> Success[✅ Show Success Message]
+    SkipSave --> End
+    Success --> End
+    
+    style Start fill:#90EE90
+    style End fill:#FFB6C1
+    style AgentThinking fill:#87CEEB
+    style SelectTool fill:#DDA0DD
+    style CalcTool fill:#F0E68C
+    style SearchTool fill:#F0E68C
+    style WikiTool fill:#F0E68C
+    style ScraperTool fill:#F0E68C
+    style DataTool fill:#F0E68C
+    style DateTool fill:#F0E68C
+    style FileTool fill:#F0E68C
+    style SaveTool fill:#F0E68C
+    style DisplayResults fill:#98FB98
+    style ErrorMsg fill:#FFB6C1
