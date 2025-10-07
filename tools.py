@@ -8,7 +8,7 @@ import json
 import os
 
 # ============================================================================
-# 1. SAVE TOOL - Save research to file
+# 1. SAVE TOOL - Save research to files
 # ============================================================================
 def save_to_txt(data: str, filename: str = "research_output.txt"):
     """
