@@ -103,8 +103,8 @@ Before you start, make sure you have:
 
 **Option A: Using Git (Recommended)**
 ```bash
-git clone https://github.com/yourusername/researchagent-pro.git
-cd researchagent-pro
+git clone https://github.com/SushilkumarBarai/Python_AgentMind_Research.git
+cd Python_AgentMind_Research
 ```
 
 **Option B: Download ZIP**
